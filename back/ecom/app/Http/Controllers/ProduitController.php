@@ -37,9 +37,9 @@ class ProduitController extends Controller
             $new_product=Produit::create([
                 'nom'=>$request->nom,
                 'image'=>$file_name,
-                'prix'=>$request->prix,
+                'prix_produit'=>$request->prix,
                 'quantite'=>$request->quantite,
-                'id_category'=>1
+                'id_category'=>$request->category
             ]);
             return $request->all();
         }
@@ -75,7 +75,7 @@ class ProduitController extends Controller
             $produit->update([
                 'nom'=>$request->nom,
                 'image'=>$file_name,
-                'prix'=>$request->prix,
+                'prix_produit'=>$request->prix_produit,
                 'quantite'=>$request->quantite,
                 'id_category'=>$request->id_category
             ]);
@@ -84,9 +84,9 @@ class ProduitController extends Controller
         }else{
             $produit->update([
                 'nom'=>$request->nom,
-                'prix'=>200,
-                'quantite'=>200,
-                'id_category'=>1
+                'prix_produit'=>$request->prix_produit,
+                'quantite'=>$request->quantite,
+                'id_category'=>$request->id_category
             ]);
             return $produit;
 
@@ -100,11 +100,6 @@ class ProduitController extends Controller
     {
         //return $request->all();
         $produit=Produit::find($id);
-        if($request->hasFile('image')){
-            return 'ja fichi';
-        }else{
-            return 'ma ja walo';
-        }
         //return $produit;
         if($request->hasFile('image')){
             $disk='public';
@@ -117,7 +112,7 @@ class ProduitController extends Controller
             $produit->update([
                 'nom'=>$request->nom,
                 'image'=>$file_name,
-                'prix'=>$request->prix,
+                'prix_produit'=>$request->prix_produit,
                 'quantite'=>$request->quantite,
                 'id_category'=>$request->id_category
             ]);
@@ -125,9 +120,9 @@ class ProduitController extends Controller
         }
         $produit->update([
             'nom'=>$request->nom,
-            'prix'=>200,
-            'quantite'=>200,
-            'id_category'=>1
+            'prix_produit'=>$request->prix_produit,
+                'quantite'=>$request->quantite,
+                'id_category'=>$request->id_category
         ]);
         return $produit;
 
@@ -138,10 +133,20 @@ class ProduitController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function edit_qnt (string $id)
+    {
+        $produit=Produit::findOrFail($id);
+        $produit->update([
+            'quantite'=>$produit->quantite-1,
+        ]);
+        return response()->json($produit, 200);
+
+    }
+
     public function destroy(string $id)
     {
         $produit=Produit::findOrFail($id);
         $produit->delete();
-        
+
     }
 }

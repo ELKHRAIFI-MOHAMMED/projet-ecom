@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Commande; 
+use App\Models\Commande;
 class CommandeController extends Controller
 {
     /**
@@ -12,12 +12,14 @@ class CommandeController extends Controller
      */
     public function index()
     {
+        //return auth()->user();
         $list=Commande::join('client','client.numero','=','commande.numero')
         ->join('produit','produit.id_produit','=','commande.id_produit')
         ->select('client.nom as nom_c','commande.*','client.*','produit.*')
+        ->where('commande.id_user',auth()->user()->id)
         ->get();
         return response()->json($list,201);
-        //{result 
+        //{result
     //     "nom_c": "hamid",
     //     "id_commande": 1,
     //     "date_commande": "2024-09-03",
@@ -58,7 +60,8 @@ class CommandeController extends Controller
         'status'=>'required|string',
         'numero'=>'required|string|digits:10',
         'id_produit'=>'required|integer',
-        'date_commande'=>'required|date'
+        'date_commande'=>'required|date',
+        'id_user'=>'required'
         ],[
             'numero.required' => 'Le champ numéro est requis.',
             'numero.string' => 'Le champ numéro doit être un string.',
@@ -80,10 +83,12 @@ class CommandeController extends Controller
         'numero'=>$new['numero'],
         'id_produit'=>$new['id_produit'],
         'prix_retour'=>0,
+        'cost'=>null,
+        'id_user'=>$new['id_user'],
         'date_livraison'=>null
     ]);
     return response()->json($commande,201);
-    
+
 
     }
 
@@ -126,8 +131,8 @@ class CommandeController extends Controller
             'status'=>$request->nom,
             'date_livraison'=>$request->date_livraison,
             'prix_retour'=>$request->prix
-        
-        ]); 
+
+        ]);
         return $cmd;
         }
         if($request->nom=='refuser'){
@@ -137,7 +142,7 @@ class CommandeController extends Controller
              'prix_retour'=>$request->prix,
              'prix_livraison'=>0,
              'date_livraison'=>null
-         ]); 
+         ]);
          return $cmd;
          }
         $cmd->update([
@@ -149,6 +154,6 @@ class CommandeController extends Controller
 
     }
 
-       
+
 
 }

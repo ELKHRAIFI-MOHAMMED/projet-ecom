@@ -10,7 +10,7 @@ class Produit extends Model
     use HasFactory;
     protected $table='produit';
     protected $primaryKey='id_produit';
-    protected $fillable=['nom','image','quantite','id_category','prix'];
+    protected $fillable=['nom','image','quantite','id_category','prix_produit'];
     public $timestamps=false;
 
     public function commande(){

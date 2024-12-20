@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('image');
             $table->string('quantite');
-            $table->string('prix');
+            $table->string('prix_produit');
             $table->bigInteger('id_category')->unsigned();
             $table->foreign('id_category')->references('id_category')->on('category');
         });

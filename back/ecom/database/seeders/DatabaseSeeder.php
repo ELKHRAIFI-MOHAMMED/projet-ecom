@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,10 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+
         User::factory()->create([
             'name' => 'mohamed',
-            'email' => 'moahmed@mohamed.com',
-            'password'=>'123123'
+            'email' => 'super@admin.com',
+            'password'=>'123123',
+            'id_role'=>"2"
         ]);
         // DB::table('produit')->insert([
         //     'nom' => 'produit 3',

@@ -7,25 +7,39 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoryController;
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\DepenceController;
+use App\Http\Controllers\CalculController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\PermitionController;
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
+Route::resource('calcul',CalculController::class)->middleware('auth:sanctum');
+Route::resource('depence',DepenceController::class)->middleware('auth:sanctum');
 Route::resource('produit',ProduitController::class);
+Route::put('/produit/qnt/{id}',[ProduitController::class,'edit_qnt']);
 Route::resource('client',ClientController::class);
 Route::resource('category',CategoryController::class);
-Route::resource('commande',CommandeController::class);
+Route::resource('commande',CommandeController::class)->middleware('auth:sanctum');
+Route::get('commande/{id_user}',[CommandeController::class,'indexx'])->middleware('auth:sanctum');
+Route::resource('role',RoleController::class);
 Route::put('commande/status/{idc}',[CommandeController::class,'up_dtae_status']);
 Route::post('produitt/{id}',[ProduitController::class,'up_dtae_image']);
 Route::get('category/produit/{idc}',[CategoryController::class,'produit_category']);
 
 /////login
 Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/test', [LoginController::class, 'test'])->name('test');
+Route::post('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/user', [LoginController::class, 'index'])->name('index');
+Route::post('/profile', [LoginController::class, 'user'])->name('test')->middleware('auth:sanctum');
 
-Route::group([
-    'middleware'=>'api',
-    'prefix'=>'auth'
-],function($router){
-    Route::post('/login', [LoginController::class, 'login'])->name('login');
-});
+
+
+
+Route::post("/permition/{id_user}",[PermitionController::class,'affecter_permition'])->middleware('auth:sanctum');;
+
+
+
+
